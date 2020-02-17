@@ -1,28 +1,1 @@
-matchHours = 14
-
-db.getCollection('khv-ticket-discount_ticket').aggregate([
-    {
-        $project: {
-            hours: {$hour: '$dateAirGo'},
-            dateAirGo: 1
-        }
-    },
-    {
-        $match: {
-            hours: matchHours
-        }
-    }
-])
-    db.getCollection('khv-ticket-discount_ticket').aggregate([
-    {
-        $project: {
-            hours: {$hour: '$dateAirGo'},
-            dateAirGo: 1
-        }
-    },
-    {
-        $match: {
-            hours: {$ne: matchHours}
-        }
-    }
-])
+collectionName = 'khv-ticket-discount_ticket' //the collection of objects to fetch fromdateField = 'dateAirGo' //the property to checkmatchHours = 0 //specify the hour part to be matched against the value in the dateagrDateField = '$' + 'dateAirGo'db.getCollection(collectionName).aggregate([    {        $project: {            hours: {$hour: agrDateField},            [dateField]: 1        }    },    {        $match: {            hours: matchHours        }    }])db.getCollection(collectionName).aggregate([   {     $project: {         hours: {$hour: agrDateField},         [dateField]: 1    } }, {     $match: {         hours: {$ne: matchHours}     } }])

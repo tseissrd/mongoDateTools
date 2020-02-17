@@ -1,23 +1,1 @@
-downFrom = new Date(2020,0,1)
-upTo = new Date(2020,5,5)
-matchHours = 14
-hours = 10
-
-db.getCollection('khv-ticket-discount_ticket').update(
-    { $and: [
-    { dateAirGo: {$lte: upTo} },
-    { dateAirGo: {$gte: downFrom} }
-        ]
-},
-    [
-    { $set: { 'dateAirGo': { $switch: {
-                           branches: [
-                               { case: { $eq: [ {$hour: '$dateAirGo'}, matchHours ] }, then: {$toDate: {$sum: [{$toLong: '$dateAirGo'},1000*60*60*hours] } } },
-                               { case: { $ne: [ {$hour: '$dateAirGo'}, matchHours ] }, then: '$dateAirGo' },
-                           ],
-                           default: '$dateAirGo'
-     } } }}
-    //{ $set: { 'dateAirGo': {$toDate: {$sum: [{$toLong: '$dateAirGo'},1000*60*60*hours] } } }}
-    ],
-    { multi: true }
-)
+collectionName = 'khv-ticket-discount_ticket' //specify a mongodb collection namedateField = 'dateAirGo' //property of the class that will be changeddownFrom = new Date(2020,0,1) //filter changing objects by a time interval upTo = new Date(2020,5,5)matchHours = 14 //specify the hour value of dates that will be changedchangeHoursBy = 10 //increment(decrement) value of hoursagrDateField = '$' + dateFielddb.getCollection(collectionName).update(    { $and: [    { [dateField]: {$lte: upTo} },    { [dateField]: {$gte: downFrom} }        ]},    [    { $set: { [dateField]: { $switch: {                           branches: [                               { case: { $eq: [ {$hour: agrDateField}, matchHours ] }, then: {$toDate: {$sum: [{$toLong: agrDateField},1000*60*60*changeHoursBy] } } },                               { case: { $ne: [ {$hour: agrDateField}, matchHours ] }, then: agrDateField },                           ],                           default: agrDateField     } } }}    ],    { multi: true })
